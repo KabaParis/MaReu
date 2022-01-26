@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Ma réu</string>
+
+    <string name="room_name">Nom de la salle</string>
+    <string name="meeting_time">Heure de la réunion</string>
+    <string name="meeting_subject">Sujet de la réunion</string>
+    <string name="mail_addresses">Participants à la réunion</string>
+</resources>
