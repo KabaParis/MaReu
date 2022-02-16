@@ -12,6 +12,7 @@
         android:layout_height="64dp"
         android:src="@drawable/ic_baseline_lens_24"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,15 +25,29 @@
         android:id="@+id/room_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="16dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        app:layout_constraintBottom_toBottomOf="@+id/room_colour"
+        app:layout_constraintBottom_toBottomOf="@+id/attendees_name"
         app:layout_constraintStart_toEndOf="@+id/room_colour"
         app:layout_constraintTop_toTopOf="@+id/room_colour"
         android:layout_marginStart="32dp"
         tools:text="@tools:sample/lorem"
 
-        />
+        android:layout_marginLeft="32dp" />
+
+    <TextView
+        android:id="@+id/attendees_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintBottom_toBottomOf="@+id/room_colour"
+        app:layout_constraintStart_toEndOf="@+id/room_colour"
+        app:layout_constraintTop_toTopOf="@+id/room_name"
+        android:layout_marginStart="32dp"
+        tools:text="@tools:sample/last_names"
+
+        android:layout_marginLeft="32dp" />
 
     <ImageButton
         android:id="@+id/room_list_delete_button"
@@ -43,7 +58,7 @@
         app:layout_constraintTop_toTopOf="@+id/room_name"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_baseline_delete_24"
-        />
+        android:layout_marginRight="16dp" />
 
 
 

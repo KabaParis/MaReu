@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Maréu">
         <activity android:name=".ui.reunion_list.AddReunionActivity"></activity>
-        <activity android:name=".ui.reunion_list.MainActivity">
+        <activity android:name=".ui.reunion_list.ReunionActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

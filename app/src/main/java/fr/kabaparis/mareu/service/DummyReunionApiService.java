@@ -1,4 +1,4 @@
-package service;
+package fr.kabaparis.mareu.service;
 
 import java.util.List;
 
@@ -39,5 +39,20 @@ public class DummyReunionApiService implements ReunionApiService {
     }
 
 
+
+    // go through the id list and when it matches, return the reunion, if not, return null
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Reunion getReunionById(long id) {
+        for (Reunion reunion : reunions)
+            if (reunion.getId() == id) {
+
+                return reunion;
+            }
+        return null;
+    }
 
 }

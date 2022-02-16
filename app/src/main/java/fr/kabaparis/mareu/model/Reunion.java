@@ -1,5 +1,7 @@
 package fr.kabaparis.mareu.model;
 
+import androidx.annotation.ColorRes;
+
 import java.util.Objects;
 
 /**
@@ -23,7 +25,8 @@ public class Reunion {
     private String address;
 
     /** Reunion Room Colour */
-    private String room_colour;
+    @ColorRes
+    private int room_colour;
 
 
     /**
@@ -36,7 +39,7 @@ public class Reunion {
      * @param room_colour
      */
 
-    public Reunion(int id, String room_name, String time, String subject, String address, String room_colour) {
+    public Reunion(int id, String room_name, String time, String subject, String address, @ColorRes int room_colour) {
 
         this.id = id;
         this.room_name = room_name;
@@ -87,11 +90,11 @@ public class Reunion {
         this.address = address;
     }
 
-    public String getRoom_colour() {
+    public int getRoom_colour() {
         return room_colour;
     }
 
-    public void setRoom_colour(String room_colour) { this.room_colour = room_colour;
+    public void setRoom_colour(int room_colour) { this.room_colour = room_colour;
     }
 
     @Override

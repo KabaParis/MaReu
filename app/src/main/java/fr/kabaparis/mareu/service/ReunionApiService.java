@@ -1,4 +1,4 @@
-package service;
+package fr.kabaparis.mareu.service;
 
 
 import java.util.List;
@@ -27,5 +27,13 @@ public interface ReunionApiService {
      * @param reunion
      */
     void createReunion(Reunion reunion);
+
+
+
+    /**
+     * Get all my Reunions by Id
+     * @return {@link List}
+     */
+    Reunion getReunionById(long id);
 
 }

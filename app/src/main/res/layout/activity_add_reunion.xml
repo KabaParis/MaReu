@@ -33,14 +33,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@id/time"
+            android:id="@+id/time"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/time"
+                android:id="@+id/reunionTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -56,7 +56,7 @@
             android:layout_marginTop="18dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/subjectText"
+                android:id="@+id/reunionSubject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

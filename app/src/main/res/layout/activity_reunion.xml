@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.reunion_list.MainActivity">
+    tools:context=".ui.reunion_list.ReunionActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/Toolbar"
-        app:layout_constraintBaseline_toTopOf="parent"
+        android:id="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:titleTextColor="@color/white"
@@ -18,23 +18,26 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add"
+        android:id="@+id/add_reunion"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         app:backgroundTint="@color/red"
         app:tint="@color/white"
         app:srcCompat="@android:drawable/ic_input_add"
         />
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:name="fr.kabaparis.mareu.ui.reunion_list.ReunionFragment"
             android:id="@+id/fragment_container_view_tag"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/Toolbar"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
