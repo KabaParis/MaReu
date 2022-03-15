@@ -1,9 +1,12 @@
 package fr.kabaparis.mareu.ui.reunion_list;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,9 +47,11 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Reunion reunion = mReunionList.get(position);
-            holder.mRoomName.setText(reunion.getRoom_name());
+        String meetingTitle = holder.itemView.getContext().getString(R.string.meeting_title, reunion.getRoom_name(), reunion.getTime(), reunion.getSubject());
+        holder.mRoomName.setText(meetingTitle);
             holder.mAttendeesName.setText(reunion.getAddress());
-            holder.mRoomColour.setImageResource(reunion.getRoom_colour());
+        ColorStateList colorStateList = AppCompatResources.getColorStateList(holder.itemView.getContext(), reunion.getRoom_colour());
+        ImageViewCompat.setImageTintList(holder.mRoomColour, colorStateList);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -86,9 +91,14 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         public TextView mAttendeesName;
         public ImageButton mDeleteButton;
 
-
         public ViewHolder(View view) {
             super(view);
+            mRoomColour = view.findViewById(R.id.room_colour);
+            mRoomName = view.findViewById(R.id.room_name);
+            mAttendeesName = view.findViewById(R.id.attendees_name);
+            mDeleteButton = view.findViewById(R.id.room_list_delete_button);
+
+
 
         }
 

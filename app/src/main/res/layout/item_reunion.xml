@@ -11,8 +11,8 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:src="@drawable/ic_baseline_lens_24"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,31 +23,37 @@
 
     <TextView
         android:id="@+id/room_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        app:layout_constraintBottom_toBottomOf="@+id/attendees_name"
+        app:layout_constraintEnd_toStartOf="@id/room_list_delete_button"
         app:layout_constraintStart_toEndOf="@+id/room_colour"
         app:layout_constraintTop_toTopOf="@+id/room_colour"
-        android:layout_marginStart="32dp"
-        tools:text="@tools:sample/lorem"
-
+        tools:text="Room A"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:textStyle="bold"
+        android:singleLine="true"
         android:layout_marginLeft="32dp" />
+
+
 
     <TextView
         android:id="@+id/attendees_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:textAppearance="?attr/textAppearanceListItem"
         app:layout_constraintBottom_toBottomOf="@+id/room_colour"
+        app:layout_constraintEnd_toStartOf="@+id/room_list_delete_button"
+        app:layout_constraintTop_toBottomOf="@+id/room_name"
         app:layout_constraintStart_toEndOf="@+id/room_colour"
-        app:layout_constraintTop_toTopOf="@+id/room_name"
-        android:layout_marginStart="32dp"
-        tools:text="@tools:sample/last_names"
+        tools:text="maxime@lamzone.com, alex@lamzone.com"
+        android:lines="1"
+        android:ellipsize="end"
+         />
 
-        android:layout_marginLeft="32dp" />
+
 
     <ImageButton
         android:id="@+id/room_list_delete_button"
@@ -56,9 +62,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/room_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/room_name"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="0dp"
         android:src="@drawable/ic_baseline_delete_24"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="0dp"
+        app:backgroundTint="@android:color/transparent"/>
 
 
 
