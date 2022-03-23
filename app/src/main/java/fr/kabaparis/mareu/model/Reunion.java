@@ -22,8 +22,8 @@ public class Reunion {
     /** Reunion time */
     private String time;
 
- //   /** Reunion date */
- //   private String date;
+    /** Reunion date */
+    private String date;
 
     /** Reunion subject */
     private String subject;
@@ -41,7 +41,7 @@ public class Reunion {
      * @param id
      * @param room_name
      * @param time
- //    * @param date
+     * @param date
      * @param subject
      * @param address
      * @param room_colour
@@ -52,7 +52,7 @@ public class Reunion {
         this.id = id;
         this.room_name = room_name;
         this.time = time;
- //       this.date = date;
+        this.date = date;
         this.subject = subject;
         this.address = address;
         this.room_colour = room_colour;
@@ -89,9 +89,9 @@ public class Reunion {
         this.time = time;
     }
 
- //   public String getDate() { return date; }
+    public String getDate() { return date; }
 
- //   public void setDate(String date) { this.date = date; }
+    public void setDate(String date) { this.date = date; }
 
     public String getSubject() {
         return subject;

@@ -2,6 +2,7 @@ package fr.kabaparis.mareu.ui.reunion_list;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -70,7 +71,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     private EditText editText;
     private TextInputEditText textInputEditText;
     private TextInputLayout textInputLayout;
-    private Chip chipEntry;
+    private Button chipEntry;
     private ChipGroup chipGroup;
 
     private Button buttonClear;
@@ -116,7 +117,25 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             createReunion = findViewById(R.id.createReunion);
 
 
-            // get reunion id by the api service
+
+            mReunionDate.init(2022, 03, 23, new DatePicker.OnDateChangedListener() {
+                        @Override
+                        public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
+                            Calendar then = Calendar.getInstance();
+
+                            then.set(Calendar.YEAR, i);
+                            then.set(Calendar.MONTH, i1);
+                            then.set(Calendar.DAY_OF_MONTH, i2);
+
+            //                Toast.makeText(this, then.getTime().toString(), Toast.LENGTH_SHORT)
+            //                        .show();
+                        }
+                    });
+
+
+
+
+                    // get reunion id by the api service
             mApiService = DI.getReunionApiService();
 
 
@@ -127,6 +146,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(this);
+
 
 
             // add attendees with default chip
@@ -144,17 +164,17 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
                     if (Patterns.EMAIL_ADDRESS.matcher(mail).matches() == true) {
                         Chip chip = new Chip(AddReunionActivity.this);
 
-                        chipEntry.setCheckable(false);
-                        chipEntry.setText(mail);
-                        chipEntry.setCloseIconVisible(true);
-                        chipEntry.setOnCloseIconClickListener(new View.OnClickListener() {
+                        chip.setCheckable(false);
+                        chip.setText(mail);
+                        chip.setCloseIconVisible(true);
+                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 chipGroup.removeView(chipEntry);
                             }
                         });
 
-                        chipGroup.addView(chipEntry);
+                        chipGroup.addView(chip);
                         mAttendeesNames.setText("");
                         mAttendees.setError(null);
                     } else {
@@ -174,15 +194,16 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
                 @Override
                 public void onClick(View view) {
                     Log.d("click", "JE PASSE SUR LE CLICK");
-                    mRoomName :  Log.d("Room name", mRoomName.getText().toString());
-                    mReunionSubject : Log.d("Reunion subject", mReunionSubject.getText().toString());
-             //       textInputLayout = findViewById((R.id.reunionSubject));
+                    Log.d("Room name", mRoomName.getFilters().toString());
+                    Log.d("Reunion subject", mReunionSubject.getText().toString());
+                    Log.d("Reunion time", mReunionTime.getCurrentHour().toString());
+                    Log.d("Reunion date", mReunionDate.getCalendarView().toString());
 
                     // if (editText.getText().toString().equals(""))
                  //   if (textInputEditText.getText().toString().isEmpty()) {
                         Reunion reunion = new Reunion(
                                 System.currentTimeMillis(),
-                                mRoomName.getText().toString(),
+                                mRoomName.getFilters().toString(),
                                 mRoomColour,
                                 mReunionTime,
                                 mReunionDate,
@@ -195,13 +216,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
             this.mApiService.createReunion(reunion);
 
-        }
-        public void setmReunionSubject (View view) {
-        Log.d("reunion subject","successful");
-        }
-
-         public void setmRoomName (View view) {
-        Log.d("room name","room selected");
          }
     /*       {
 
@@ -237,58 +251,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
     }
 
-    public class TimePickerDemoActivity extends Activity implements
-            TimePicker.OnTimeChangedListener {
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_add_reunion);
-
-            TimePicker picker = (TimePicker) findViewById(R.id.reunionTimePicker);
-
-            picker.setOnTimeChangedListener(this);
-        }
-
-        @Override
-        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-            Calendar then = Calendar.getInstance();
-
-            then.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            then.set(Calendar.MINUTE, minute);
-            then.set(Calendar.SECOND, 0);
-
-            Toast.makeText(this, then.getTime().toString(), Toast.LENGTH_SHORT)
-                    .show();
-        }
-    }
-
-    public class DatePickerDemoActivity extends Activity implements
-            DatePicker.OnDateChangedListener {
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_add_reunion);
-
-            DatePicker picker = (DatePicker) findViewById(R.id.reunionDatePicker);
-
-            picker.setOnDateChangedListener(this);
-        }
-
-        @Override
-        public void onDateChanged(DatePicker view, int year, int month, int day) {
-            Calendar then = Calendar.getInstance();
-
-            then.set(Calendar.YEAR, year);
-            then.set(Calendar.MONTH, month);
-            then.set(Calendar.DAY_OF_WEEK, day);
-
-            Toast.makeText(this, then.getTime().toString(), Toast.LENGTH_SHORT)
-                    .show();
-        }
-    }
 
 
 
