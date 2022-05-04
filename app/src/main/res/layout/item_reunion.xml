@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     >
 
+
     <ImageView
         android:id="@+id/room_colour"
         android:layout_width="64dp"

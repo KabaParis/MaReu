@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -21,6 +22,7 @@ import fr.kabaparis.mareu.events.DeleteReunionEvent;
 import fr.kabaparis.mareu.model.Reunion;
 import fr.kabaparis.mareu.placeholder.PlaceholderContent.PlaceholderItem;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -35,6 +37,7 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         mReunionList = items;
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,12 +47,19 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
 
     }
 
+
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Reunion reunion = mReunionList.get(position);
-        String meetingTitle = holder.itemView.getContext().getString(R.string.meeting_title, reunion.getRoom_name(), reunion.getTime(), reunion.getSubject());
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(reunion.getTimestamp());
+        final String hour = calendar.get(Calendar.HOUR) + "h" + calendar.get(Calendar.MINUTE);
+
+        String meetingTitle = holder.itemView.getContext().getString(R.string.meeting_title, reunion.getRoom_name(), hour, reunion.getSubject());
         holder.mRoomName.setText(meetingTitle);
-            holder.mAttendeesName.setText(reunion.getAddress());
+        holder.mAttendeesName.setText(reunion.getAddress());
         ColorStateList colorStateList = AppCompatResources.getColorStateList(holder.itemView.getContext(), reunion.getRoom_colour());
         ImageViewCompat.setImageTintList(holder.mRoomColour, colorStateList);
 
@@ -90,6 +100,7 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         public TextView mRoomName;
         public TextView mAttendeesName;
         public ImageButton mDeleteButton;
+
 
         public ViewHolder(View view) {
             super(view);

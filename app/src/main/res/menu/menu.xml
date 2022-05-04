@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/filterRoom" android:title="@string/filter_room" android:icon="@drawable/ic_baseline_delete_24"/>
+<item android:id="@+id/filterDate" android:title="@string/filter_date" android:icon="@mipmap/ic_launcher"/>
+<item android:id="@+id/noFilter" android:title="@string/no_filter" android:icon="@drawable/ic_launcher_foreground"/>
+</menu>

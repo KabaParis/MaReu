@@ -12,3 +12,5 @@
     tools:context=".ui.reunion_list.ReunionFragment"
     tools:listitem="@layout/item_reunion"
     />
+
+

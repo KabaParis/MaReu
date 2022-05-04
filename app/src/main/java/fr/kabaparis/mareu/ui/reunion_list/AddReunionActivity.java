@@ -1,17 +1,27 @@
 package fr.kabaparis.mareu.ui.reunion_list;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.CalendarContract;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
@@ -37,36 +47,51 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.datepicker.MaterialTextInputPicker;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.resources.MaterialAttributes;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.theme.MaterialComponentsViewInflater;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
+import java.util.jar.Attributes;
+
+import javax.security.auth.Subject;
 
 import fr.kabaparis.mareu.R;
 import fr.kabaparis.mareu.databinding.ActivityReunionBinding;
 import fr.kabaparis.mareu.model.Reunion;
+import fr.kabaparis.mareu.service.DummyColourGenerator;
 import fr.kabaparis.mareu.service.ReunionApiService;
 
 public class AddReunionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
-    private TextView mRoomName;
+
     private TimePicker mReunionTime;
     private DatePicker mReunionDate;
     private TextView mReunionSubject;
-    private ImageView mRoomColour;
     private TextInputEditText mAttendeesNames;
     private TextInputLayout mAttendees;
     private ImageButton mAddButton;
     private MaterialButton createReunion;
+    private TextInputLayout subject;
+    private ChipGroup mAttendeesMails;
 
     private ReunionApiService mApiService;
-    private Reunion reunion;
     private Spinner spinner;
     private EditText editText;
     private TextInputEditText textInputEditText;
@@ -80,11 +105,12 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
     private static final String LOG_TAG = "AndroidChipDemo";
     private String text;
+    private String msg;
 
     /**
      * Used to navigate to this activity
      *
-     * @param activity
+     * @params activity
      */
     public static void navigate(AppCompatActivity activity) {
         Intent intent = new Intent(activity, AddReunionActivity.class);
@@ -101,131 +127,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         init();
     }
 
-
-
-        public void init() {
-
-            // get the views identified by their attributes
-            mRoomName = findViewById(R.id.roomName);
-            mReunionTime = findViewById(R.id.reunionTimePicker);
-            mReunionDate = findViewById(R.id.reunionDatePicker);
-            mReunionSubject = findViewById(R.id.reunionSubject);
-            mAttendeesNames = findViewById(R.id.attendeesNames);
-            mAttendees = findViewById(R.id.attendees);
-            mAddButton = findViewById(R.id.add_reunion);
-            mRoomColour = findViewById(R.id.room_colour);
-            createReunion = findViewById(R.id.createReunion);
-
-
-
-            mReunionDate.init(2022, 03, 23, new DatePicker.OnDateChangedListener() {
-                        @Override
-                        public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
-                            Calendar then = Calendar.getInstance();
-
-                            then.set(Calendar.YEAR, i);
-                            then.set(Calendar.MONTH, i1);
-                            then.set(Calendar.DAY_OF_MONTH, i2);
-
-            //                Toast.makeText(this, then.getTime().toString(), Toast.LENGTH_SHORT)
-            //                        .show();
-                        }
-                    });
-
-
-
-
-                    // get reunion id by the api service
-            mApiService = DI.getReunionApiService();
-
-
-            // create spinner
-            spinner = findViewById(R.id.spinner);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.rooms, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(this);
-
-
-
-            // add attendees with default chip
-            this.chipEntry = (Chip) this.findViewById(R.id.chipEntry);
-            this.chipGroup = this.findViewById(R.id.attendeesMails);
-            this.chipEntry.setOnClickListener(new View.OnClickListener() {
-
-
-                // add attendees with chip group
-                @Override
-                public void onClick(View v) {
-                    String mail = mAttendeesNames.getEditableText().toString();
-                    Log.d("CHIPS", mail);
-
-                    if (Patterns.EMAIL_ADDRESS.matcher(mail).matches() == true) {
-                        Chip chip = new Chip(AddReunionActivity.this);
-
-                        chip.setCheckable(false);
-                        chip.setText(mail);
-                        chip.setCloseIconVisible(true);
-                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                chipGroup.removeView(chipEntry);
-                            }
-                        });
-
-                        chipGroup.addView(chip);
-                        mAttendeesNames.setText("");
-                        mAttendees.setError(null);
-                    } else {
-                        mAttendees.setError("merci de saisir une adresse mail");
-                    }
-                }
-            });
-
-
-        //     findViewById(R.id.attendeesNames).checkInputConnectionProxy(chipEntry);
-        //                chipGroup.addView(chipEntry);
-
-
-            // add information to meeting creation
-            this.createReunion.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    Log.d("click", "JE PASSE SUR LE CLICK");
-                    Log.d("Room name", mRoomName.getFilters().toString());
-                    Log.d("Reunion subject", mReunionSubject.getText().toString());
-                    Log.d("Reunion time", mReunionTime.getCurrentHour().toString());
-                    Log.d("Reunion date", mReunionDate.getCalendarView().toString());
-
-                    // if (editText.getText().toString().equals(""))
-                 //   if (textInputEditText.getText().toString().isEmpty()) {
-                        Reunion reunion = new Reunion(
-                                System.currentTimeMillis(),
-                                mRoomName.getFilters().toString(),
-                                mRoomColour,
-                                mReunionTime,
-                                mReunionDate,
-                                mReunionSubject.getText().toString(),
-                                mAttendeesNames.getEditableText().toString());
-                    }
-        //        }
-
-            });
-
-            this.mApiService.createReunion(reunion);
-
-         }
-    /*       {
-
-               mReunionSubject.setError("merci de remplir ce champ");
-               textInputEditText.setError("merci de remplir ce champ");
-            }
-    */
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -235,6 +136,149 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             }
         }
         return super.onOptionsItemSelected(item);
+
+    }
+
+    public void init() {
+
+        // get the views identified by their attributes
+
+        mReunionTime = findViewById(R.id.reunionTimePicker);
+        mReunionDate = findViewById(R.id.reunionDatePicker);
+        mReunionSubject = findViewById(R.id.reunionSubject);
+        mAttendeesNames = findViewById(R.id.attendeesNames);
+        mAttendees = findViewById(R.id.attendees);
+        mAddButton = findViewById(R.id.add_reunion);
+        createReunion = findViewById(R.id.createReunion);
+        subject = findViewById(R.id.subject);
+        mAttendeesMails = findViewById(R.id.attendeesMails);
+
+
+        // get reunion id by the api service
+        mApiService = DI.getReunionApiService();
+        Calendar currentDate = Calendar.getInstance();
+        mReunionDate.init(currentDate.get(Calendar.YEAR),  currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH),
+                null
+
+
+
+        );
+
+
+
+        // create spinner
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.rooms, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+
+        // add attendees with default chip
+        this.chipEntry = (Chip) this.findViewById(R.id.chipEntry);
+        this.chipGroup = this.findViewById(R.id.attendeesMails);
+        this.chipEntry.setOnClickListener(new View.OnClickListener() {
+
+
+            // add attendees with chip group
+            @Override
+            public void onClick(View v) {
+                String mail = mAttendeesNames.getEditableText().toString();
+                Log.d("CHIPS", mail);
+
+                if (Patterns.EMAIL_ADDRESS.matcher(mail).matches() == true) {
+                    Chip chip = new Chip(AddReunionActivity.this);
+
+                    chip.setCheckable(false);
+                    chip.setText(mail);
+                    chip.setCloseIconVisible(true);
+                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            chipGroup.removeView(chipEntry);
+                        }
+                    });
+
+                    chipGroup.addView(chip);
+                    mAttendeesNames.setText("");
+                    mAttendees.setError(null);
+                } else {
+                    mAttendees.setError("merci de saisir une adresse mail");
+                }
+            }
+        });
+
+
+
+        // add information to meeting creation
+        this.createReunion.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+            addReunion();
+
+
+                Log.d("click", "JE PASSE SUR LE CLICK");
+
+                final String room = (String) spinner.getSelectedItem();
+                Log.d("Room name", room);
+
+                final String subject = mReunionSubject.getText().toString();
+                Log.d("Reunion subject", subject);
+
+                final Integer currentHour = mReunionTime.getCurrentHour();
+                final Integer currentMinute = mReunionTime.getCurrentMinute();
+                Log.d("Reunion time", currentHour + "h" + currentMinute);
+
+                final int year = mReunionDate.getYear();
+                final int month = mReunionDate.getMonth();
+                final int dayOfMonth = mReunionDate.getDayOfMonth();
+                Log.d("Reunion date", year + "/" + month + "/" + dayOfMonth);
+
+                final Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth, currentHour, currentMinute);
+                Log.d("Timestamp", calendar.getTimeInMillis() + "");
+
+
+                // Get the selected chips from the chipGroup
+                String mails = "";
+                int chipsCount = chipGroup.getChildCount();
+                int i = 0;
+                while (i < chipsCount) {
+                    Chip chip = (Chip) chipGroup.getChildAt(i);
+
+                        mails += chip.getText().toString() + " " ;
+
+                    i++;
+
+                Log.d ("value", i+"")   ;
+                };
+                Log.d("CHIP GROUP", mails);
+                Log.d("test", "test");
+
+
+                List<Integer> intArray = DummyColourGenerator.DUMMY_COLOURS;
+                Random random = new Random();
+                int i1 = random.nextInt(intArray.size());
+                Log.d("colour", "dummy colour");
+
+
+                Reunion reunion = new Reunion(
+                        UUID.randomUUID().hashCode(),
+                        room,
+                        calendar.getTimeInMillis(),
+                        subject,
+                        mails,
+                        intArray.get(i1)
+
+                );
+
+                mApiService.createReunion(reunion);
+                finish();
+            }
+
+        });
 
     }
 
@@ -252,49 +296,22 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     }
 
 
+    void addReunion() {
 
+        if (mReunionSubject.getText().toString().equals("") == true) {
+            subject.setError("merci de remplir ce champ");
+            Toast.makeText(AddReunionActivity.this, "Merci de préciser un sujet de réunion", Toast.LENGTH_SHORT).show();
+            return;
 
+        }
 
- /*    private void appendLog(String text)
-        this.editTextLog.append(text);
-        ;
-        this.editTextLog.append("\n");
-        Log.i(LOG_TAG, text);
+        if (chipGroup.getCheckedChipIds().isEmpty()) {
 
-        class  ClickListenerImpl implements View.OnClickListener {
-
-            @Override
-            public void onClick(View v) {
-                appendLog("Clicked");
-            }
-
-            private void appendLog(String clicked) {
-            }
+            Toast.makeText(AddReunionActivity.this, "Merci d'ajouter des participants", Toast.LENGTH_SHORT).show();
+            return;
         }
 
 
-        class CloseIconClickListenerImpl implements View.OnClickListener {
-
-            @Override
-            public void onClick(View v) {
-                appendLog("Close Icon Clicked");
-            }
-
-            private void appendLog(String close_icon_clicked) {
-            }
-        }
-
-        class CheckedChangeListenerImpl implements  CompoundButton.OnCheckedChangeListener {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                appendLog("Checked Changed! isChecked? " + isChecked);
-            }
-
-            private void appendLog(String s) {
-            }
-        }
-
-*/
+    }
 
 }

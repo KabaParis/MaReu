@@ -27,12 +27,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/room"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="120dp">
 
             <Spinner
                 android:id="@+id/spinner"
@@ -41,14 +35,8 @@
 
             </Spinner>
 
-            <TextView
-                android:id="@+id/roomName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
 
-                android:inputType="textAutoComplete" />
-        </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:id="@+id/time"
@@ -86,7 +74,6 @@
             app:helperTextTextColor="@color/red"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
-            app:errorIconDrawable="@color/design_default_color_error"
             android:layout_marginTop="18dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -108,7 +95,6 @@
             app:helperTextTextColor="@color/red"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
-            app:errorIconDrawable="@color/design_default_color_error"
             android:layout_marginTop="18dp">
 
             <com.google.android.material.textfield.TextInputEditText

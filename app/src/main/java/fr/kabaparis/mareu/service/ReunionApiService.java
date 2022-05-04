@@ -1,6 +1,7 @@
 package fr.kabaparis.mareu.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.kabaparis.mareu.model.Reunion;
@@ -35,5 +36,18 @@ public interface ReunionApiService {
      * @return {@link List}
      */
     Reunion getReunionById(long id);
+
+
+    /**
+     * Get all my Reunions filtered by room
+     * @return {@link List}
+     */
+    ArrayList<Reunion> getReunionFilteredByRoom(String room);
+
+    /**
+     * Get all my Reunions filtered by room
+     * @return {@link List}
+     */
+    ArrayList<Reunion> getReunionFilteredByDate(int year, int month, int day);
 
 }

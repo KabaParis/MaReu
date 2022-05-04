@@ -5,6 +5,10 @@
     <string name="meeting_time">Heure et date de la réunion</string>
     <string name="meeting_subject">Sujet de la réunion</string>
     <string name="mail_addresses">Participants à la réunion</string>
+    <string name="filter_room">Filtrer par salle</string>
+    <string name="filter_date">Filtrer par date</string>
+    <string name="no_filter">Ne pas filtrer</string>
+    <string name="cancel">Annuler</string>
     <string name="meeting_title">%1$s - %2$s - %3$s</string>
     <string-array name="rooms">
         <item>Réunion A</item>

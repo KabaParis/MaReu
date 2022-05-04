@@ -1,22 +1,43 @@
 package fr.kabaparis.mareu.ui.reunion_list;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import fr.kabaparis.mareu.R;
 import fr.kabaparis.mareu.events.DeleteReunionEvent;
@@ -36,6 +57,7 @@ public class ReunionFragment extends Fragment {
 
     /**
      * Create and return a new instance
+     *
      * @return @{@link ReunionFragment}
      */
     public static ReunionFragment newInstance() {
@@ -47,7 +69,73 @@ public class ReunionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApiService = DI.getReunionApiService();
+        setHasOptionsMenu(true);
+
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.filterRoom) {
+            AtomicInteger selectedRoom = new AtomicInteger();
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setSingleChoiceItems(R.array.rooms, 0, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+            selectedRoom.set(i);
+                }
+            });
+            builder.setPositiveButton(R.string.filter_room, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // Room selection
+                    String currentRoom = getResources().getStringArray(R.array.rooms)[selectedRoom.get()];
+                    Log.d("currentRoom" , currentRoom);
+
+                    mReunions = mApiService.getReunionFilteredByRoom(currentRoom);
+                    updateAdapter();
+                }
+            });
+                    // Cancel of selection
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+            builder.show();
+
+
+            // Create the AlertDialog object and return it
+            return true;
+        }
+
+        if (item.getItemId() == R.id.filterDate) {
+
+            Calendar currentDate = Calendar.getInstance();
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),  new DatePickerDialog.OnDateSetListener() {
+
+                @Override
+                public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                mReunions = mApiService.getReunionFilteredByDate(i, i1, i2);
+                updateAdapter();
+                }
+            },currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH)
+                    );
+
+            datePickerDialog.show();
+
+        }
+            if (item.getItemId() == R.id.noFilter) {
+            initList();
+            }
+
+            return true;
+        }
 
 
     @Override
@@ -70,8 +158,13 @@ public class ReunionFragment extends Fragment {
 
     private void initList() {
         mReunions = mApiService.getReunions();
+        updateAdapter();
+    }
+
+    private void updateAdapter() {
         mRecyclerView.setAdapter(new MyReunionRecyclerViewAdapter(mReunions));
     }
+
 
     @Override
     public void onResume() {
