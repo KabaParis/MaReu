@@ -37,7 +37,6 @@ public interface ReunionApiService {
      */
     Reunion getReunionById(long id);
 
-
     /**
      * Get all my Reunions filtered by room
      * @return {@link List}

@@ -156,15 +156,12 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
         // get reunion id by the api service
         mApiService = DI.getReunionApiService();
+
         Calendar currentDate = Calendar.getInstance();
         mReunionDate.init(currentDate.get(Calendar.YEAR),  currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH),
                 null
 
-
-
         );
-
-
 
         // create spinner
         spinner = findViewById(R.id.spinner);
@@ -210,13 +207,22 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         });
 
 
-
         // add information to meeting creation
         this.createReunion.setOnClickListener(new View.OnClickListener() {
+
+            public boolean addReunion() {
+                if (mReunionSubject == null)
+                    return false;
+                else if (mAttendeesMails == null)
+                    return false;
+                else
+                    return true;
+            }
 
             @Override
             public void onClick(View view) {
             addReunion();
+
 
 
                 Log.d("click", "JE PASSE SUR LE CLICK");
@@ -286,7 +292,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String choice = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(getApplicationContext(), choice, Toast.LENGTH_LONG).show();
+    //    Toast.makeText(getApplicationContext(), choice, Toast.LENGTH_LONG).show();
 
     }
 
@@ -299,15 +305,15 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     void addReunion() {
 
         if (mReunionSubject.getText().toString().equals("") == true) {
-            subject.setError("merci de remplir ce champ");
-            Toast.makeText(AddReunionActivity.this, "Merci de préciser un sujet de réunion", Toast.LENGTH_SHORT).show();
+            subject.setError("merci de saisir un sujet de réunion");
+            Toast.makeText(AddReunionActivity.this, "merci de saisir un sujet de réunion", Toast.LENGTH_SHORT).show();
             return;
 
         }
 
         if (chipGroup.getCheckedChipIds().isEmpty()) {
 
-            Toast.makeText(AddReunionActivity.this, "Merci d'ajouter des participants", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddReunionActivity.this, "merci d'ajouter des participants", Toast.LENGTH_SHORT).show();
             return;
         }
 
