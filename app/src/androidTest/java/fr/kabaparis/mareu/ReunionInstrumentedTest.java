@@ -48,6 +48,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.*;
 import static utils.RecyclerViewItemCountAssertion.withItemCount;
+import static utils.TextInputLayoutMatcher.hasTextInputLayoutErrorText;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -138,7 +139,7 @@ public class ReunionInstrumentedTest {
         // Then a toast must appear with text : "merci de saisir un sujet de réunion"
     //    onView(withText("merci de saisir un sujet de réunion"))
     //            .inRoot(withDecorView(not(decorView))).check(matches(isDisplayed()));
-        onView(withId(R.id.subject)).check(matches(hasErrorText("merci de saisir un sujet de réunion")));
+        onView(withId(R.id.subject)).check(matches(hasTextInputLayoutErrorText("merci de saisir un sujet de réunion")));
     }
 
 
@@ -163,6 +164,7 @@ public class ReunionInstrumentedTest {
         // Then a toast must appear with text : "Merci d'ajouter des participants"
         onView(withText("merci d'ajouter des participants"))
                 .inRoot(withDecorView(not(decorView))).check(matches(isDisplayed()));
+
     }
 
 
@@ -187,7 +189,7 @@ public class ReunionInstrumentedTest {
         onView(withId(R.id.chipEntry)).perform(scrollTo(),click());
 
         // Then an error message should appear with text : "merci de saisir une adresse mail"
-        onView(withId(R.id.attendees)).check(matches(hasErrorText("merci de saisir une adresse mail")));
+        onView(withId(R.id.attendees)).check(matches(hasTextInputLayoutErrorText("merci de saisir une adresse mail")));
     }
 
 
@@ -233,8 +235,8 @@ public class ReunionInstrumentedTest {
         onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
 
         // We check if a new meeting is added
-        onView(Matchers.allOf(ViewMatchers.isDisplayed(),
-        withId(R.id.list))).check(withItemCount(ITEMS_COUNT+1));
+   //     onView(Matchers.allOf(ViewMatchers.isDisplayed(),
+       onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT+1));
 
     }
 

@@ -80,7 +80,6 @@ import fr.kabaparis.mareu.service.ReunionApiService;
 public class AddReunionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
-
     private TimePicker mReunionTime;
     private DatePicker mReunionDate;
     private TextView mReunionSubject;
@@ -102,7 +101,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     private Button buttonClear;
 
 
-
     private static final String LOG_TAG = "AndroidChipDemo";
     private String text;
     private String msg;
@@ -116,7 +114,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         Intent intent = new Intent(activity, AddReunionActivity.class);
         ActivityCompat.startActivity(activity, intent, null);
     }
-
 
 
     @Override
@@ -158,7 +155,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         mApiService = DI.getReunionApiService();
 
         Calendar currentDate = Calendar.getInstance();
-        mReunionDate.init(currentDate.get(Calendar.YEAR),  currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH),
+        mReunionDate.init(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH),
                 null
 
         );
@@ -210,80 +207,75 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         // add information to meeting creation
         this.createReunion.setOnClickListener(new View.OnClickListener() {
 
-            public boolean addReunion() {
-                if (mReunionSubject == null)
-                    return false;
-                else if (mAttendeesMails == null)
-                    return false;
-                else
-                    return true;
-            }
+
 
             @Override
             public void onClick(View view) {
-            addReunion();
+
+                boolean result = addReunion();
+                if (result == true) {
 
 
+                    Log.d("click", "JE PASSE SUR LE CLICK");
 
-                Log.d("click", "JE PASSE SUR LE CLICK");
+                    final String room = (String) spinner.getSelectedItem();
+                    Log.d("Room name", room);
 
-                final String room = (String) spinner.getSelectedItem();
-                Log.d("Room name", room);
+                    final String subject = mReunionSubject.getText().toString();
+                    Log.d("Reunion subject", subject);
 
-                final String subject = mReunionSubject.getText().toString();
-                Log.d("Reunion subject", subject);
+                    final Integer currentHour = mReunionTime.getCurrentHour();
+                    final Integer currentMinute = mReunionTime.getCurrentMinute();
+                    Log.d("Reunion time", currentHour + "h" + currentMinute);
 
-                final Integer currentHour = mReunionTime.getCurrentHour();
-                final Integer currentMinute = mReunionTime.getCurrentMinute();
-                Log.d("Reunion time", currentHour + "h" + currentMinute);
+                    final int year = mReunionDate.getYear();
+                    final int month = mReunionDate.getMonth();
+                    final int dayOfMonth = mReunionDate.getDayOfMonth();
+                    Log.d("Reunion date", year + "/" + month + "/" + dayOfMonth);
 
-                final int year = mReunionDate.getYear();
-                final int month = mReunionDate.getMonth();
-                final int dayOfMonth = mReunionDate.getDayOfMonth();
-                Log.d("Reunion date", year + "/" + month + "/" + dayOfMonth);
-
-                final Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, dayOfMonth, currentHour, currentMinute);
-                Log.d("Timestamp", calendar.getTimeInMillis() + "");
-
-
-                // Get the selected chips from the chipGroup
-                String mails = "";
-                int chipsCount = chipGroup.getChildCount();
-                int i = 0;
-                while (i < chipsCount) {
-                    Chip chip = (Chip) chipGroup.getChildAt(i);
-
-                        mails += chip.getText().toString() + " " ;
-
-                    i++;
-
-                Log.d ("value", i+"")   ;
-                };
-                Log.d("CHIP GROUP", mails);
-                Log.d("test", "test");
+                    final Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, dayOfMonth, currentHour, currentMinute);
+                    Log.d("Timestamp", calendar.getTimeInMillis() + "");
 
 
-                List<Integer> intArray = DummyColourGenerator.DUMMY_COLOURS;
-                Random random = new Random();
-                int i1 = random.nextInt(intArray.size());
-                Log.d("colour", "dummy colour");
+                    // Get the selected chips from the chipGroup
+                    String mails = "";
+                    int chipsCount = chipGroup.getChildCount();
+                    int i = 0;
+                    while (i < chipsCount) {
+                        Chip chip = (Chip) chipGroup.getChildAt(i);
+
+                        mails += chip.getText().toString() + " ";
+
+                        i++;
+
+                        Log.d("value", i + "");
+                    }
+                    ;
+                    Log.d("CHIP GROUP", mails);
+                    Log.d("test", "test");
 
 
-                Reunion reunion = new Reunion(
-                        UUID.randomUUID().hashCode(),
-                        room,
-                        calendar.getTimeInMillis(),
-                        subject,
-                        mails,
-                        intArray.get(i1)
+                    List<Integer> intArray = DummyColourGenerator.DUMMY_COLOURS;
+                    Random random = new Random();
+                    int i1 = random.nextInt(intArray.size());
+                    Log.d("colour", "dummy colour");
 
-                );
 
-                mApiService.createReunion(reunion);
-                finish();
+                    Reunion reunion = new Reunion(
+                            UUID.randomUUID().hashCode(),
+                            room,
+                            calendar.getTimeInMillis(),
+                            subject,
+                            mails,
+                            intArray.get(i1)
+
+                    );
+
+                    mApiService.createReunion(reunion);
+                    finish();
+                }
             }
-
         });
 
     }
@@ -292,32 +284,39 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String choice = adapterView.getItemAtPosition(i).toString();
-    //    Toast.makeText(getApplicationContext(), choice, Toast.LENGTH_LONG).show();
+        //    Toast.makeText(getApplicationContext(), choice, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> adapterView){
 
     }
 
-
-    void addReunion() {
+    private boolean addReunion() {
 
         if (mReunionSubject.getText().toString().equals("") == true) {
             subject.setError("merci de saisir un sujet de réunion");
-            Toast.makeText(AddReunionActivity.this, "merci de saisir un sujet de réunion", Toast.LENGTH_SHORT).show();
-            return;
+        //    Toast.makeText(AddReunionActivity.this, "merci de saisir un sujet de réunion", Toast.LENGTH_SHORT).show();
 
+            return false;
         }
 
-        if (chipGroup.getCheckedChipIds().isEmpty()) {
+        else if (chipGroup.getCheckedChipIds().isEmpty()) {
 
             Toast.makeText(AddReunionActivity.this, "merci d'ajouter des participants", Toast.LENGTH_SHORT).show();
-            return;
+
+            return false;
         }
+
+        return true;
+    }
+
+    // Make sure to avoid overlapping same meeting in the same room at the same time and date
+    public void avoidOverlappingReunions() {
 
 
     }
+
 
 }
