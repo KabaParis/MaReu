@@ -161,7 +161,7 @@ public class ReunionInstrumentedTest {
         // We click on button "ENREGISTRER"
         onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
 
-        // Then a toast must appear with text : "Merci d'ajouter des participants"
+        // Then a toast must appear with text : "merci d'ajouter des participants"
         onView(withText("merci d'ajouter des participants"))
                 .inRoot(withDecorView(not(decorView))).check(matches(isDisplayed()));
 
@@ -235,8 +235,88 @@ public class ReunionInstrumentedTest {
         onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
 
         // We check if a new meeting is added
-   //     onView(Matchers.allOf(ViewMatchers.isDisplayed(),
-       onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT+1));
+        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT+1));
+
+    }
+
+    /**
+     * We ensure that there is no overlapping when creating meetings
+     */
+    @Test
+    public void meetingCreation_should_avoid_overlapping() {
+        // Given we are on the list page
+        // We click on add button
+        onView(withId(R.id.add_reunion)).perform(click());
+
+        // We select the Réunion B in spinner
+        onView(withId(R.id.spinner)).perform(click());
+        onData(Matchers.anything())
+                .inRoot(RootMatchers.isPlatformPopup())
+                .atPosition(1)
+                .perform(click());
+        onView(withId(R.id.spinner)).check(matches(withSpinnerText("Réunion B")));
+
+        // We select the time in timePicker
+        onView(withId(R.id.reunionTimePicker)).perform(click());
+        onView(isAssignableFrom(TimePicker.class)).perform(PickerActions.setTime(11, 30));
+
+        // We select the date in datePicker
+        onView(withId(R.id.reunionDatePicker)).perform(click());
+        onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate
+                (2022, 05, 15));
+
+        // We scroll down and then fill the subject in
+        onView(withId(R.id.reunionSubject)).perform(scrollTo(),typeText("Subject"),
+                ViewActions.closeSoftKeyboard());
+
+        // We write the email address
+        onView(withId(R.id.attendeesNames)).perform(typeText("test@gmail.com"));
+        Espresso.closeSoftKeyboard();
+
+        // We validate the chip
+        onView(withId(R.id.chipEntry)).perform(click());
+
+        // We click on button "ENREGISTRER"
+        onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
+
+        // Then the meeting should appear on the list
+        // Then we create another meeting
+        // We click on add button
+        onView(withId(R.id.add_reunion)).perform(click());
+
+        // We select the Réunion B in spinner
+        onView(withId(R.id.spinner)).perform(click());
+        onData(Matchers.anything())
+                .inRoot(RootMatchers.isPlatformPopup())
+                .atPosition(1)
+                .perform(click());
+        onView(withId(R.id.spinner)).check(matches(withSpinnerText("Réunion B")));
+
+        // We select the time in timePicker
+        onView(withId(R.id.reunionTimePicker)).perform(click());
+        onView(isAssignableFrom(TimePicker.class)).perform(PickerActions.setTime(12, 00));
+
+        // We select the date in datePicker
+        onView(withId(R.id.reunionDatePicker)).perform(click());
+        onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate
+                (2022, 05, 15));
+
+        // We scroll down and then fill the subject in
+        onView(withId(R.id.reunionSubject)).perform(scrollTo(),typeText("Subject2"),
+                ViewActions.closeSoftKeyboard());
+
+        // We write the email address
+        onView(withId(R.id.attendeesNames)).perform(typeText("test2@gmail.com"));
+        Espresso.closeSoftKeyboard();
+
+        // We validate the chip
+        onView(withId(R.id.chipEntry)).perform(click());
+
+        // We click on button "ENREGISTRER"
+        onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
+
+        // The creation should not be allowed
+
 
     }
 

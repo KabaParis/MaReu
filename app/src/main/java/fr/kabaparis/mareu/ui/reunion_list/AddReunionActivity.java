@@ -302,7 +302,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             return false;
         }
 
-        else if (chipGroup.getCheckedChipIds().isEmpty()) {
+        else if (chipGroup.getChildCount()==0) {
 
             Toast.makeText(AddReunionActivity.this, "merci d'ajouter des participants", Toast.LENGTH_SHORT).show();
 
