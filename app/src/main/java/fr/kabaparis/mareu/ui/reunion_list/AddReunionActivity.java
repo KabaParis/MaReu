@@ -60,6 +60,7 @@ import com.google.android.material.theme.MaterialComponentsViewInflater;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.sql.Timestamp;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -312,10 +313,17 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         return true;
     }
 
-    // Make sure to avoid overlapping same meeting in the same room at the same time and date
-    public void avoidOverlappingReunions() {
+        // Make sure to avoid overlapping same meeting in the same room at the same time and date
+        public void avoidOverlappingReunions() {
+             long timeStamp = System.currentTimeMillis();
 
-
+            //3000(milliseconds in a second)*60(seconds in a minute)*45(number of minutes)=8100000
+            if (Math.abs(timeStamp-System.currentTimeMillis())>8100000){
+                //timestamp is within 45 minutes of current system time
+            } else {
+                //timestamp is not within 45 minutes of current system time
+                Toast.makeText(AddReunionActivity.this, "merci de sélectionner une autre salle ou un intervalle de minimum 45min", Toast.LENGTH_SHORT).show();
+            }
     }
 
 
