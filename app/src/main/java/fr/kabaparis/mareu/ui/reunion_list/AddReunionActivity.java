@@ -62,6 +62,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.sql.Timestamp;
 import java.time.Year;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -99,12 +100,16 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     private Button chipEntry;
     private ChipGroup chipGroup;
 
-    private Button buttonClear;
 
 
     private static final String LOG_TAG = "AndroidChipDemo";
     private String text;
     private String msg;
+    private boolean getOverlappingReunions;
+
+
+    public AddReunionActivity() {
+    }
 
     /**
      * Used to navigate to this activity
@@ -272,11 +277,12 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
                             intArray.get(i1)
 
                     );
+            mApiService.createReunion(reunion);
+            finish();
 
-                    mApiService.createReunion(reunion);
-                    finish();
+                    }
                 }
-            }
+
         });
 
     }
@@ -294,6 +300,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
     }
 
+
     private boolean addReunion() {
 
         if (mReunionSubject.getText().toString().equals("") == true) {
@@ -310,21 +317,21 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
             return false;
         }
 
+        else if (getOverlappingReunions) {
+            // current timestamp is not within 45 minutes of new timestamp
+            mApiService.getOverlappingReunions(int year, int month, int day);
+     //       , int hour, int minute);
+
+            Toast.makeText(AddReunionActivity.this, "merci de sélectionner une autre salle ou un intervalle de minimum 45min",
+                    Toast.LENGTH_SHORT).show();
+
+            return false;
+        }
+
+        else if (!getOverlappingReunions) {
+            finish();
+        }
         return true;
     }
-
-        // Make sure to avoid overlapping same meeting in the same room at the same time and date
-        public void avoidOverlappingReunions() {
-             long timeStamp = System.currentTimeMillis();
-
-            //3000(milliseconds in a second)*60(seconds in a minute)*45(number of minutes)=8100000
-            if (Math.abs(timeStamp-System.currentTimeMillis())>8100000){
-                //timestamp is within 45 minutes of current system time
-            } else {
-                //timestamp is not within 45 minutes of current system time
-                Toast.makeText(AddReunionActivity.this, "merci de sélectionner une autre salle ou un intervalle de minimum 45min", Toast.LENGTH_SHORT).show();
-            }
-    }
-
 
 }

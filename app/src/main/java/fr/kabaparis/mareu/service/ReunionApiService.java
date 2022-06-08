@@ -49,4 +49,11 @@ public interface ReunionApiService {
      */
     ArrayList<Reunion> getReunionFilteredByDate(int year, int month, int day);
 
+
+    /**
+     * Get a reunion overlapped
+     * @param
+     */
+    boolean getOverlappingReunions(int year, int month, int day);
+
 }
