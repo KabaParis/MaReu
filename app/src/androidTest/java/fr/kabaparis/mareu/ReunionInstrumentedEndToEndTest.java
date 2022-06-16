@@ -9,6 +9,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.matcher.RootMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -27,8 +28,10 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static utils.RecyclerViewItemCountAssertion.withItemCount;
@@ -139,11 +142,9 @@ public class ReunionInstrumentedEndToEndTest {
         onView(withId(R.id.reunionDatePicker)).perform(click());
         onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate
                 (2022, 05, 15));
-
         // We scroll down and then fill the subject in
         onView(withId(R.id.reunionSubject)).perform(scrollTo(),typeText("Subject"),
                 ViewActions.closeSoftKeyboard());
-
         // We write the email address
         onView(withId(R.id.attendeesNames)).perform(typeText("test@gmail.com"));
         Espresso.closeSoftKeyboard();
@@ -192,7 +193,16 @@ public class ReunionInstrumentedEndToEndTest {
         // We click on button "ENREGISTRER"
         onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
 
-        // The creation should not be allowed
+        // The creation should not be allowed and an toast with an error message should appear
+//        onView(withText("merci d'ajouter des participants"))
+//                .inRoot(withDecorView(not(decorView))).check(matches(isDisplayed()));
+
+        // Technical limit due to upgraded version of android, please check :
+        // Toast message assertions not working with android 11 and target sdk 30 · Issue #803 · android/android-test
+
+
+        // Then we check if "ENREGISTRER" button is displayed (meaning we are still on the same page)
+        onView(withId(R.id.createReunion)).check(matches(ViewMatchers.isDisplayed()));
 
     }
 

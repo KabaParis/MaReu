@@ -161,14 +161,15 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         mApiService = DI.getReunionApiService();
 
         Calendar currentDate = Calendar.getInstance();
-        mReunionDate.init(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH),
-                null
+        mReunionDate.init(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH),
+                currentDate.get(Calendar.DAY_OF_MONTH), null
 
         );
 
         // create spinner
         spinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.rooms, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.rooms,
+                android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapter);
@@ -215,6 +216,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
 
 
+    //        @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
 
@@ -301,6 +303,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     }
 
 
+ //   @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean addReunion() {
 
         if (mReunionSubject.getText().toString().equals("") == true) {
@@ -312,25 +315,22 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
 
         else if (chipGroup.getChildCount()==0) {
 
-            Toast.makeText(AddReunionActivity.this, "merci d'ajouter des participants", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddReunionActivity.this, "merci d'ajouter des participants",
+                    Toast.LENGTH_SHORT).show();
 
             return false;
         }
 
-        else if (getOverlappingReunions) {
-            // current timestamp is not within 45 minutes of new timestamp
-            mApiService.getOverlappingReunions(int year, int month, int day);
-     //       , int hour, int minute);
-
+        else if (mApiService.getOverlappingReunions((String) spinner.getSelectedItem(), mReunionDate.getYear(),
+                mReunionDate.getMonth(), mReunionDate.getDayOfMonth(), mReunionTime.getCurrentHour(),
+                mReunionTime.getCurrentMinute())) {
+            // current timestamp is within 45 minutes of new timestamp
             Toast.makeText(AddReunionActivity.this, "merci de sélectionner une autre salle ou un intervalle de minimum 45min",
                     Toast.LENGTH_SHORT).show();
 
             return false;
         }
 
-        else if (!getOverlappingReunions) {
-            finish();
-        }
         return true;
     }
 

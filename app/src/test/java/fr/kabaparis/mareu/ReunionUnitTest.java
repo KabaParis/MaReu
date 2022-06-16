@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,14 @@ public class ReunionUnitTest {
 
     @Test
     public void createReunionWithSuccess() {
-        Reunion reunionToCreate = new Reunion(8,"test", 1648665625000L , "test", "test", R.color.orange);
+        Reunion reunionToCreate = new Reunion(8, "test",
+                1648665625000L, "test", "test", R.color.orange);
         service.createReunion(reunionToCreate);
         assertTrue(service.getReunions().contains(reunionToCreate));
     }
+
     @Test
-    public void getReunionFilteredByRoom(){
+    public void getReunionFilteredByRoom() {
         ArrayList<Reunion> reunion = service.getReunionFilteredByRoom("Réunion A");
         assertEquals(2, reunion.size());
         reunion = service.getReunionFilteredByRoom("Réunion E");
@@ -58,16 +61,26 @@ public class ReunionUnitTest {
     }
 
     @Test
-    public void getReunionFilteredByDate(){
+    public void getReunionFilteredByDate() {
         ArrayList<Reunion> reunion = service.getReunionFilteredByDate(2022, 04, 04);
         assertEquals(1, reunion.size());
         reunion = service.getReunionFilteredByDate(2022, 06, 03);
         assertEquals(0, reunion.size());
 
     }
-    @Test
-    public void getOverlappingReunions(){
 
+    @Test
+    public void getOverlappingReunions() {
+        // Create a new meeting
+        boolean overlappingReunions = service.getOverlappingReunions("Réunion A", 2022,
+                05, 04, 19, 50);
+        // There is an overlapping so the meeting can't be created
+        assertTrue(overlappingReunions);
+
+        boolean notOverlappingReunions = service.getOverlappingReunions("Réunion A", 2022,
+                06, 20, 10, 00);
+        // There is no overlapping so the meeting is created
+        assertFalse(notOverlappingReunions);
 
     }
 }

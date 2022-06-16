@@ -74,13 +74,9 @@ public class ReunionInstrumentedCreationPageTest {
         // We write the email address
         onView(withId(R.id.attendeesNames)).perform(scrollTo(),typeText("test@gmail.com"));
         Espresso.closeSoftKeyboard();
-
         // We click on the button "ENREGISTRER"
         onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
-
-        // Then a toast must appear with text : "merci de saisir un sujet de réunion"
-        //    onView(withText("merci de saisir un sujet de réunion"))
-        //            .inRoot(withDecorView(not(decorView))).check(matches(isDisplayed()));
+        // Then an error message must appear with text : "merci de saisir un sujet de réunion"
         onView(withId(R.id.subject)).check(matches(hasTextInputLayoutErrorText("merci de saisir un sujet de réunion")));
     }
 

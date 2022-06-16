@@ -54,6 +54,6 @@ public interface ReunionApiService {
      * Get a reunion overlapped
      * @param
      */
-    boolean getOverlappingReunions(int year, int month, int day);
+    boolean getOverlappingReunions(String room_name, int year, int month, int day, int hour, int minute);
 
 }

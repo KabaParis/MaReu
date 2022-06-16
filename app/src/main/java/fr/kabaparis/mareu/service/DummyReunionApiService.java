@@ -91,8 +91,6 @@ public class DummyReunionApiService implements ReunionApiService {
     @Override
     public ArrayList<Reunion> getReunionFilteredByDate(int year, int month, int day) {
 
-        //     timestamp = new Timestamp(Calendar.getInstance();
-
         // Creation of new ArrayList
         ArrayList<Reunion> result = new ArrayList<>();
 
@@ -120,37 +118,28 @@ public class DummyReunionApiService implements ReunionApiService {
      * @param year, month, day
      */
     @Override
-    // Make sure to avoid overlapping same meeting in the same room at the same date and time
-    public boolean getOverlappingReunions(int year, int month, int day) {
 
-        // Creation of new ArrayList
-        ArrayList<Reunion> result = new ArrayList<>();
+    // Make sure to avoid overlapping same meeting in the same room at the same date and time
+    public boolean getOverlappingReunions(String room_name, int year, int month, int day, int hour, int minute) {
+
         // Go through the list of meetings and get the matching room names and timestamps
         for (int i = 0; i < reunions.size(); i++) {
 
             String reunionNameAtIndex = reunions.get(i).getRoom_name();
-            boolean sameRoom = reunionNameAtIndex.equals(reunionNameAtIndex);
+            boolean sameRoom = reunionNameAtIndex.equals(room_name);
 
             long date = reunions.get(i).getTimestamp();
-    //        long time = reunions.get(i).getTimestamp();
             Calendar newCalendar = Calendar.getInstance();
-            newCalendar.setTimeInMillis(date);
-    //        newCalendar.setTimeInMillis(time);
+            newCalendar.set(year, month, day, hour, minute);
 
-            //3000(milliseconds in a second)*60(seconds in a minute)*45(number of minutes)=8100000
-   /*         if (sameRoom && Math.abs(year - newCalendar.get(Calendar.YEAR) + month - newCalendar.get(Calendar.MONTH) +
-                    day - newCalendar.get(Calendar.DAY_OF_MONTH) + hour - newCalendar.get(Calendar.HOUR) +
-                    minute - newCalendar.get(Calendar.MINUTE)) > 8100000)
+
+            // 3000(milliseconds in a second)*60(seconds in a minute)*45(number of minutes)=8100000
+           if (sameRoom && Math.abs(date - newCalendar.getTimeInMillis()) < 8100000)
                 // if timestamp is not within 45 minutes of new timestamp in same room
-                result.add(reunions.get(i));
-*/
-            if (sameRoom && Math.abs(year - newCalendar.get(Calendar.YEAR) + month - newCalendar.get(Calendar.MONTH) +
-                    day - newCalendar.get(Calendar.DAY_OF_MONTH)) > 8100000)
-                // if timestamp is not within 45 minutes of new timestamp in same room
-                result.add(reunions.get(i));
+               return true;
 
         }
-        return true;
+        return false;
     }
 
 }
