@@ -1,17 +1,14 @@
 package fr.kabaparis.mareu.ui.reunion_list;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import fr.kabaparis.mareu.R;
 
 
 public class ReunionActivity extends AppCompatActivity {
-
 
 
     @Override
@@ -21,14 +18,13 @@ public class ReunionActivity extends AppCompatActivity {
         setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.app_name);
 
-    findViewById(R.id.add_reunion).setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            AddReunionActivity.navigate(ReunionActivity.this);
+        findViewById(R.id.add_reunion).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddReunionActivity.navigate(ReunionActivity.this);
 
-        }
-    });
-
+            }
+        });
 
 
     }

@@ -9,7 +9,6 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 
-
 public class TextInputLayoutMatcher {
     public static Matcher<View> hasTextInputLayoutErrorText(final String expectedErrorText) {
         return new TypeSafeMatcher<View>() {

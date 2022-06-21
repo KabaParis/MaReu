@@ -2,20 +2,18 @@ package fr.kabaparis.mareu;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import fr.kabaparis.mareu.model.Reunion;
 import fr.kabaparis.mareu.service.DummyReunionGenerator;
 import fr.kabaparis.mareu.service.ReunionApiService;
 import fr.kabaparis.mareu.ui.reunion_list.DI;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test on Reunion service
@@ -73,10 +71,11 @@ public class ReunionUnitTest {
     public void getOverlappingReunions() {
         // Create a new meeting
         boolean overlappingReunions = service.getOverlappingReunions("Réunion A", 2022,
-                05, 04, 19, 50);
+                04, 04, 19, 30);
         // There is an overlapping so the meeting can't be created
         assertTrue(overlappingReunions);
 
+        // Create another meeting
         boolean notOverlappingReunions = service.getOverlappingReunions("Réunion A", 2022,
                 06, 20, 10, 00);
         // There is no overlapping so the meeting is created

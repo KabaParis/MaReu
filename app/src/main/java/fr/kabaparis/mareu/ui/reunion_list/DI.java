@@ -9,6 +9,7 @@ public class DI {
 
     /**
      * Get an instance on @{@link ReunionApiService}
+     *
      * @return
      */
     public static ReunionApiService getReunionApiService() {
@@ -17,6 +18,7 @@ public class DI {
 
     /**
      * Get always a new instance on @{@link ReunionApiService}. Useful for tests, so we ensure the context is clean.
+     *
      * @return
      */
     public static ReunionApiService getNewInstanceApiService() {

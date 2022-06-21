@@ -1,10 +1,5 @@
 package fr.kabaparis.mareu.model;
 
-import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.TimePicker;
-
 import androidx.annotation.ColorRes;
 
 import java.util.Objects;
@@ -14,28 +9,41 @@ import java.util.Objects;
  */
 public class Reunion {
 
-    /** Identifier */
+    /**
+     * Identifier
+     */
     private long id;
 
-    /** Reunion room name */
+    /**
+     * Reunion room name
+     */
     private String room_name;
 
-    /** Reunion time and date */
+    /**
+     * Reunion time and date
+     */
     private long timestamp;
 
-    /** Reunion subject */
+    /**
+     * Reunion subject
+     */
     private String subject;
 
-    /** Reunion attendees email address */
+    /**
+     * Reunion attendees email address
+     */
     private String address;
 
-    /** Reunion Room Colour */
+    /**
+     * Reunion Room Colour
+     */
     @ColorRes
     private int room_colour;
 
 
     /**
      * Constructor
+     *
      * @param id
      * @param room_name
      * @param timestamp
@@ -54,7 +62,6 @@ public class Reunion {
         this.room_colour = room_colour;
 
     }
-
 
 
     public long getId() {
@@ -101,7 +108,8 @@ public class Reunion {
         return room_colour;
     }
 
-    public void setRoom_colour(int room_colour) { this.room_colour = room_colour;
+    public void setRoom_colour(int room_colour) {
+        this.room_colour = room_colour;
     }
 
     @Override

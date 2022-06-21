@@ -10,6 +10,13 @@
     <string name="no_filter">Ne pas filtrer</string>
     <string name="cancel">Annuler</string>
     <string name="meeting_title">%1$s - %2$s - %3$s</string>
+
+    <string name="attendees_error">Merci de saisir une adresse mail</string>
+    <string name="subject_error">Merci de saisir un sujet de réunion</string>
+    <string name="empty_attendees_error">Merci d\'ajouter des participants</string>
+    <string name="test_subject">Sujet</string>
+    <string name="overlapping_error">Merci de sélectionner une autre salle ou un intervalle de minimum 45min</string>
+
     <string-array name="rooms">
         <item>Réunion A</item>
         <item>Réunion B</item>

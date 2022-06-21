@@ -28,10 +28,8 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static utils.RecyclerViewItemCountAssertion.withItemCount;
@@ -45,15 +43,13 @@ import static utils.RecyclerViewItemCountAssertion.withItemCount;
 @RunWith(AndroidJUnit4.class)
 public class ReunionInstrumentedEndToEndTest {
 
-    // This is fixed
-    private int ITEMS_COUNT = 10;
-
-    private ActivityScenario<ReunionActivity> mActivity;
-    private View decorView;
-
     @Rule
     public ActivityScenarioRule<ReunionActivity> mActivityRule =
             new ActivityScenarioRule<ReunionActivity>(ReunionActivity.class);
+    // This is fixed
+    private int ITEMS_COUNT = 10;
+    private ActivityScenario<ReunionActivity> mActivity;
+    private View decorView;
 
     @Before
     public void setUp() {
@@ -72,8 +68,9 @@ public class ReunionInstrumentedEndToEndTest {
      */
     @Test
     public void createButton_isFunctioning_properly() {
+
         // Given : The meeting list contains 10 items
-        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
+        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT = 10));
 
         // We click on add button
         onView(withId(R.id.add_reunion)).perform(click());
@@ -96,7 +93,7 @@ public class ReunionInstrumentedEndToEndTest {
                 (2022, 05, 15));
 
         // We scroll down and then fill the subject in
-        onView(withId(R.id.reunionSubject)).perform(scrollTo(),typeText("Subject"),
+        onView(withId(R.id.reunionSubject)).perform(scrollTo(), typeText("Subject"),
                 ViewActions.closeSoftKeyboard());
 
         // We write the email address
@@ -110,7 +107,8 @@ public class ReunionInstrumentedEndToEndTest {
         onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
 
         // We check if a new meeting is added
-        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT+1));
+        ITEMS_COUNT = ITEMS_COUNT + 1;
+        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
 
     }
 
@@ -120,8 +118,9 @@ public class ReunionInstrumentedEndToEndTest {
      */
     @Test
     public void meetingCreation_should_avoid_overlapping() {
+
         // Given we are on the list page and the meeting list contains 10 items
-        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
+        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT = 10));
 
         // We click on add button
         onView(withId(R.id.add_reunion)).perform(click());
@@ -143,7 +142,7 @@ public class ReunionInstrumentedEndToEndTest {
         onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate
                 (2022, 05, 15));
         // We scroll down and then fill the subject in
-        onView(withId(R.id.reunionSubject)).perform(scrollTo(),typeText("Subject"),
+        onView(withId(R.id.reunionSubject)).perform(scrollTo(), typeText("Subject"),
                 ViewActions.closeSoftKeyboard());
         // We write the email address
         onView(withId(R.id.attendeesNames)).perform(typeText("test@gmail.com"));
@@ -156,7 +155,8 @@ public class ReunionInstrumentedEndToEndTest {
         onView(withId(R.id.createReunion)).perform(scrollTo()).perform(click());
 
         // Then the meeting should appear on the list (we check if it's added)
-        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT+1));
+        ITEMS_COUNT = ITEMS_COUNT + 1;
+        onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
 
         // Then we create another meeting
         // We click on add button
@@ -180,7 +180,7 @@ public class ReunionInstrumentedEndToEndTest {
                 (2022, 05, 15));
 
         // We scroll down and then fill the subject in
-        onView(withId(R.id.reunionSubject)).perform(scrollTo(),typeText("Subject2"),
+        onView(withId(R.id.reunionSubject)).perform(scrollTo(), typeText("Subject2"),
                 ViewActions.closeSoftKeyboard());
 
         // We write the email address
@@ -199,7 +199,6 @@ public class ReunionInstrumentedEndToEndTest {
 
         // Technical limit due to upgraded version of android, please check :
         // Toast message assertions not working with android 11 and target sdk 30 · Issue #803 · android/android-test
-
 
         // Then we check if "ENREGISTRER" button is displayed (meaning we are still on the same page)
         onView(withId(R.id.createReunion)).check(matches(ViewMatchers.isDisplayed()));

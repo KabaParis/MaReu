@@ -3,14 +3,12 @@ package utils;
 import android.view.View;
 
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.platform.ui.UiController;
 
 import org.hamcrest.Matcher;
 
 import fr.kabaparis.mareu.R;
 
-public class DeleteViewAction implements ViewAction{
+public class DeleteViewAction implements ViewAction {
     @Override
     public Matcher<View> getConstraints() {
         return null;

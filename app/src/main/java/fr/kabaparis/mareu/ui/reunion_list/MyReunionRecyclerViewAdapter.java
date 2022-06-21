@@ -1,10 +1,5 @@
 package fr.kabaparis.mareu.ui.reunion_list;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.widget.ImageViewCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -13,17 +8,21 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.widget.ImageViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.Calendar;
+import java.util.List;
 
 import fr.kabaparis.mareu.R;
 import fr.kabaparis.mareu.events.DeleteReunionEvent;
 import fr.kabaparis.mareu.model.Reunion;
 import fr.kabaparis.mareu.placeholder.PlaceholderContent.PlaceholderItem;
-
-import java.util.Calendar;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
@@ -48,7 +47,6 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
     }
 
 
-
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Reunion reunion = mReunionList.get(position);
@@ -60,7 +58,8 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         String meetingTitle = holder.itemView.getContext().getString(R.string.meeting_title, reunion.getRoom_name(), hour, reunion.getSubject());
         holder.mRoomName.setText(meetingTitle);
         holder.mAttendeesName.setText(reunion.getAddress());
-        ColorStateList colorStateList = AppCompatResources.getColorStateList(holder.itemView.getContext(), reunion.getRoom_colour());
+        ColorStateList colorStateList = AppCompatResources.getColorStateList(holder.itemView.getContext(),
+                reunion.getRoom_colour());
         ImageViewCompat.setImageTintList(holder.mRoomColour, colorStateList);
 
 
@@ -85,6 +84,7 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         });
 
     }
+
     public Reunion getReunion(int position) {
         return this.mReunionList.get(position);
 
@@ -108,7 +108,6 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
             mRoomName = view.findViewById(R.id.room_name);
             mAttendeesName = view.findViewById(R.id.attendees_name);
             mDeleteButton = view.findViewById(R.id.room_list_delete_button);
-
 
 
         }

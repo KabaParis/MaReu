@@ -1,80 +1,35 @@
 package fr.kabaparis.mareu.ui.reunion_list;
 
-import androidx.annotation.ColorRes;
-import androidx.annotation.IdRes;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.view.menu.MenuView;
-import androidx.appcompat.widget.ButtonBarLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.widget.ImageViewCompat;
-import androidx.fragment.app.FragmentActivity;
-
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
-import android.provider.CalendarContract;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.util.Patterns;
-import android.util.Size;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.datepicker.MaterialTextInputPicker;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
-import com.google.android.material.resources.MaterialAttributes;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.theme.MaterialComponentsViewInflater;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.sql.Timestamp;
-import java.time.Year;
-import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
-import java.util.jar.Attributes;
-
-import javax.security.auth.Subject;
 
 import fr.kabaparis.mareu.R;
-import fr.kabaparis.mareu.databinding.ActivityReunionBinding;
 import fr.kabaparis.mareu.model.Reunion;
 import fr.kabaparis.mareu.service.DummyColourGenerator;
 import fr.kabaparis.mareu.service.ReunionApiService;
@@ -82,30 +37,18 @@ import fr.kabaparis.mareu.service.ReunionApiService;
 public class AddReunionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
+    private static final String LOG_TAG = "AndroidChipDemo";
     private TimePicker mReunionTime;
     private DatePicker mReunionDate;
     private TextView mReunionSubject;
     private TextInputEditText mAttendeesNames;
     private TextInputLayout mAttendees;
-    private ImageButton mAddButton;
     private MaterialButton createReunion;
     private TextInputLayout subject;
-    private ChipGroup mAttendeesMails;
-
     private ReunionApiService mApiService;
     private Spinner spinner;
-    private EditText editText;
-    private TextInputEditText textInputEditText;
-    private TextInputLayout textInputLayout;
     private Button chipEntry;
     private ChipGroup chipGroup;
-
-
-
-    private static final String LOG_TAG = "AndroidChipDemo";
-    private String text;
-    private String msg;
-    private boolean getOverlappingReunions;
 
 
     public AddReunionActivity() {
@@ -151,10 +94,8 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         mReunionSubject = findViewById(R.id.reunionSubject);
         mAttendeesNames = findViewById(R.id.attendeesNames);
         mAttendees = findViewById(R.id.attendees);
-        mAddButton = findViewById(R.id.add_reunion);
         createReunion = findViewById(R.id.createReunion);
         subject = findViewById(R.id.subject);
-        mAttendeesMails = findViewById(R.id.attendeesMails);
 
 
         // get reunion id by the api service
@@ -205,7 +146,7 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
                     mAttendeesNames.setText("");
                     mAttendees.setError(null);
                 } else {
-                    mAttendees.setError("merci de saisir une adresse mail");
+                    mAttendees.setError(getString(R.string.attendees_error));
                 }
             }
         });
@@ -215,8 +156,6 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
         this.createReunion.setOnClickListener(new View.OnClickListener() {
 
 
-
-    //        @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
 
@@ -279,11 +218,11 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
                             intArray.get(i1)
 
                     );
-            mApiService.createReunion(reunion);
-            finish();
+                    mApiService.createReunion(reunion);
+                    finish();
 
-                    }
                 }
+            }
 
         });
 
@@ -293,39 +232,36 @@ public class AddReunionActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String choice = adapterView.getItemAtPosition(i).toString();
-        //    Toast.makeText(getApplicationContext(), choice, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), choice, Toast.LENGTH_LONG).show();
 
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView){
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 
 
- //   @RequiresApi(api = Build.VERSION_CODES.M)
+    //   @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean addReunion() {
 
         if (mReunionSubject.getText().toString().equals("") == true) {
-            subject.setError("merci de saisir un sujet de réunion");
-        //    Toast.makeText(AddReunionActivity.this, "merci de saisir un sujet de réunion", Toast.LENGTH_SHORT).show();
-
-            return false;
-        }
-
-        else if (chipGroup.getChildCount()==0) {
-
-            Toast.makeText(AddReunionActivity.this, "merci d'ajouter des participants",
+            subject.setError(getString(R.string.subject_error));
+            Toast.makeText(AddReunionActivity.this, getString(R.string.subject_error),
                     Toast.LENGTH_SHORT).show();
 
             return false;
-        }
+        } else if (chipGroup.getChildCount() == 0) {
 
-        else if (mApiService.getOverlappingReunions((String) spinner.getSelectedItem(), mReunionDate.getYear(),
+            Toast.makeText(AddReunionActivity.this, getString(R.string.empty_attendees_error),
+                    Toast.LENGTH_SHORT).show();
+
+            return false;
+        } else if (mApiService.getOverlappingReunions((String) spinner.getSelectedItem(), mReunionDate.getYear(),
                 mReunionDate.getMonth(), mReunionDate.getDayOfMonth(), mReunionTime.getCurrentHour(),
                 mReunionTime.getCurrentMinute())) {
             // current timestamp is within 45 minutes of new timestamp
-            Toast.makeText(AddReunionActivity.this, "merci de sélectionner une autre salle ou un intervalle de minimum 45min",
+            Toast.makeText(AddReunionActivity.this, getString(R.string.overlapping_error),
                     Toast.LENGTH_SHORT).show();
 
             return false;

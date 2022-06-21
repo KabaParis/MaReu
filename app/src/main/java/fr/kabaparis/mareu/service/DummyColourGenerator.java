@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import fr.kabaparis.mareu.R;
-import fr.kabaparis.mareu.model.Reunion;
 
 public class DummyColourGenerator {
 

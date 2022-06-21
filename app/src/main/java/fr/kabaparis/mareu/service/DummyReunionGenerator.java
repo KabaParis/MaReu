@@ -28,7 +28,7 @@ public abstract class DummyReunionGenerator {
                     "anne@lamzone.com, sophie@lamzone.com, nicolas@lamzone.com", R.color.orange),
             new Reunion(9, "Réunion I", 1647865625000L, "Computers",
                     "malika@lamzone.com, luc@lamzone.com, antoine@lamzone.com", R.color.yellow),
-            new Reunion(10,"Réunion J", 1647365625000L, "Lucas",
+            new Reunion(10, "Réunion J", 1647365625000L, "Lucas",
                     "maxime@lamzone.com, alex@lamzone.com, josiane@lamzone.com", R.color.purple_700)
 
     );

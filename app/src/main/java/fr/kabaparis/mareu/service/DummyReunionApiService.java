@@ -42,7 +42,6 @@ public class DummyReunionApiService implements ReunionApiService {
 
 
     // go through the id list and when it matches, return the reunion, if not, return null
-
     /**
      * {@inheritDoc}
      */
@@ -111,7 +110,6 @@ public class DummyReunionApiService implements ReunionApiService {
     }
 
 
-
     /**
      * {@inheritDoc}
      *
@@ -134,9 +132,9 @@ public class DummyReunionApiService implements ReunionApiService {
 
 
             // 3000(milliseconds in a second)*60(seconds in a minute)*45(number of minutes)=8100000
-           if (sameRoom && Math.abs(date - newCalendar.getTimeInMillis()) < 8100000)
+            if (sameRoom && Math.abs(date - newCalendar.getTimeInMillis()) < 8100000)
                 // if timestamp is not within 45 minutes of new timestamp in same room
-               return true;
+                return true;
 
         }
         return false;

@@ -13,38 +13,43 @@ public interface ReunionApiService {
 
     /**
      * Get all my Reunions
+     *
      * @return {@link List}
      */
     List<Reunion> getReunions();
 
     /**
      * Deletes a reunion
+     *
      * @param reunion
      */
     void deleteReunion(Reunion reunion);
 
     /**
      * Create a reunion
+     *
      * @param reunion
      */
     void createReunion(Reunion reunion);
 
 
-
     /**
      * Get all my Reunions by Id
+     *
      * @return {@link List}
      */
     Reunion getReunionById(long id);
 
     /**
      * Get all my Reunions filtered by room
+     *
      * @return {@link List}
      */
     ArrayList<Reunion> getReunionFilteredByRoom(String room);
 
     /**
      * Get all my Reunions filtered by room
+     *
      * @return {@link List}
      */
     ArrayList<Reunion> getReunionFilteredByDate(int year, int month, int day);
@@ -52,6 +57,7 @@ public interface ReunionApiService {
 
     /**
      * Get a reunion overlapped
+     *
      * @param
      */
     boolean getOverlappingReunions(String room_name, int year, int month, int day, int hour, int minute);

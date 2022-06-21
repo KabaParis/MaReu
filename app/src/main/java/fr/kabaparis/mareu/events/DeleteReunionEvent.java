@@ -16,10 +16,12 @@ public class DeleteReunionEvent {
 
     /**
      * Constructor.
+     *
      * @param reunion
      */
     public DeleteReunionEvent(Reunion reunion) {
-        this.reunion = reunion; }
+        this.reunion = reunion;
+    }
 
 }
 
